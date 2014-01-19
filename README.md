@@ -14,14 +14,14 @@ to be more in line with the Java guidelines. The second thing is about the
 constructor of the Detector class, which also (for the new users) is the only
 class: two new constructors have been added:
 
-		Detector(PApplet parent)					(1)
+		Detector(PApplet parent)							(1)
 
-		Detector(PApplet parent,int threshold)				(2)
+		Detector(PApplet parent,int threshold)					(2)
 
 if you use the #1 you need to call the method to set the blob's threshold value 
 at least one time:
 	        	
-		setThreshold(int threshold)					(3)
+		setThreshold(int threshold)							(3)
 
 The new constructors set automatically the area searched for blobs to the 
 entire image, by default, but this behaviour can be altered by calling the 
@@ -34,7 +34,7 @@ amount of pixels to be scanned, with a consequent increasing in the speed of
 execution. The method is paired with another one which revert to default the size
 of the ROI :
 
-		unsetRoi()							(5)
+		unsetRoi()										(5)
 
 after calling #5 the entire image is once again scanned for blob, as it was before 
 calling #4.
