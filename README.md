@@ -1,10 +1,7 @@
 		BLOBSCANNER PROCESSING LIBRARY VERSION 0.1-alpha
-author: Antonio Moinaro (c)
-license: GPLv3
-document version: 0.1 
-date: 18/01/14 02:00:25
-	 
-			  
+
+Blobscanner is a library for the [Processing](http://processing.org) programming 
+environment. It's used for blob detection and analisys in image and video.
 
 CHANGES
 
@@ -14,8 +11,10 @@ to be more in line with the Java guidelines. The second thing is about the
 constructor of the Detector class, which also (for the new users) is the only
 class: two new constructors have been added:
 
-		Detector(PApplet parent)	(1)
+		Detector(PApplet parent)	(1)  
 
+and  
+		
 		Detector(PApplet parent,int threshold)	(2)
 
 if you use the #1 you need to call the method to set the blob's threshold value 
@@ -41,3 +40,5 @@ calling #4.
 
 The old constructor was left to provide some backward compatibility for users who 
 decide to install the new version. It will be removed in a future release. 
+Visit the project's [site](https://sites.google.com/site/blobscanner/home) for 
+informations and tutorials.
