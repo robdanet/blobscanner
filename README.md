@@ -41,4 +41,6 @@ calling #4.
 The old constructor was left to provide some backward compatibility for users who 
 decide to install the new version. It will be removed in a future release. 
 Visit the project's [site](https://sites.google.com/site/blobscanner/home) for 
-informations and tutorials.
+informations and tutorials. Also from there you can download the zip archive
+containing executable jar file, docs and examples. 
+
