@@ -1,6 +1,6 @@
-/*
- * Blobscanner v. 0.1-a
- * by Antonio Molinaro (c) 26/12/2013  
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * Defines a Region Of Interest where
  * blobscanner searches for blobs.
  * Usage: click the right button to create blobs

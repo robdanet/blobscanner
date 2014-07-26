@@ -1,7 +1,6 @@
-/*
- *
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro(c) 08/12/2013
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  *
  * The library assign to each blob a label or if you
  * prefer an ID to identify it. This ID is necessary 

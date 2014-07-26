@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a  
- * by Antonio Molinaro (c) 09/12/2013.
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
  * Computes the top left bounding box 
  * corner for each blob in the image.  
  */

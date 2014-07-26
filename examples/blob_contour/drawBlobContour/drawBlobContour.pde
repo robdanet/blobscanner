@@ -1,6 +1,6 @@
-/**
- * Blobscanner v. 0.1-a
- * by A.Molinaro(c) 18/12/2013.
+/* 
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
  * Method usage example:  
  * drawBlobContour(int blobnumber,int contourColor,float thickness)
  *

@@ -1,6 +1,7 @@
-/* blobscanner v. 0.1-a
- * by Antonio Molinaro (c) 27/12/2013
- * Demonstrate the usage of getRoiParameters
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
+ * Demonstrates the usage of getRoiParameters
  * method. 
  */
  import blobscanner.*;

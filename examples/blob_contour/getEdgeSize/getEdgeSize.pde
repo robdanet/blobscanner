@@ -1,15 +1,14 @@
-
-/**
-  * Blobscanner v. 0.1-a
-  * by A.Molinaro(c) 08/12/2013.
-  * Method usage example:  
-  * getEdgeSize(int blobnumber)
-  *
-  * Computes the number of edge pixel for
-  * the specified blob.
-  * findBlobs() or imageFindBlobs(),loadBlobsFeatures()
-  * must be called before this method.   
-  */
+/* 
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
+ * Method usage example:  
+ * getEdgeSize(int blobnumber)
+ *
+ * Computes the number of edge pixel for
+ * the specified blob.
+ * findBlobs() or imageFindBlobs(),loadBlobsFeatures()
+ * must be called before this method.   
+ */
 import blobscanner.*;
 PImage blobs;
 Detector bs;

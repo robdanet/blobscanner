@@ -1,8 +1,7 @@
 /* 
- * Blobscanner v. 0.1-a
- * by Antonio Molinaro - 08/12/2013.
- * Draws the blobs contours.
- *
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
+ * Draws the blobs contours. 
  */
 import blobscanner.*;
 

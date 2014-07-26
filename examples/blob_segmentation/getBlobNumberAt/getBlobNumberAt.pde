@@ -1,6 +1,6 @@
-/**
- * Blobscanner v. 0.1-a 
- * Antonio Molinaro (c) 09/1/2013
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * Returns the blob number at the x y coordinates 
  * or -1 there isn't a blob.
  * returns -1; 

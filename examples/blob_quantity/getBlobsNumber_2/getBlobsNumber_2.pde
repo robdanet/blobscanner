@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a
- * by Antonio Molinaro (c) 17/12/2013.
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * Computes the number of blobs in the video 
  * frame. Check the next example for a faster
  * method {findBlobs()}

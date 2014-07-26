@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro - 17/12/2013.
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
  * Compute the mass of each blob in the image.
  * 
  */

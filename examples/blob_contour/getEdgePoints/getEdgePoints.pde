@@ -1,18 +1,18 @@
- /* 
-  * Blobscanner v. 0.1-a
-  * by Antonio Molinaro (c)  08/12/2013.
-  * Method usage example: 
-  * getEdgePoints(int blobnumber)
-  *
-  * Computes the coordinates of the edge's pixels for
-  * the specified blob.
-  * findBlobs() or imageFindBlobs(), and loadBlobsFeatures()
-  * must be called before this method. 
-  */
+/* 
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
+ * Method usage example: 
+ * getEdgePoints(int blobnumber)
+ *
+ * Computes the coordinates of the edge's pixels for
+ * the specified blob.
+ * findBlobs() or imageFindBlobs(), and loadBlobsFeatures()
+ * must be called before this method. 
+ */
 import blobscanner.*;
 PImage blobs;
 Detector bs;
-final int STDANDARD = 296;//tile standard size
+final int STANDARD = 296;//tile standard size
 PVector []  edge  ; 
 int i;
 
@@ -39,7 +39,7 @@ void draw(){
    edge  = bs.getEdgePoints(i); 
    
    //if its size is not standart
-   if(edge.length != STDANDARD){
+   if(edge.length != STANDARD){
    
    //paints the pixels in red  
    for(int k = 0; k < edge .length;k++){

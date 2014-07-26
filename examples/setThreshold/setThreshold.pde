@@ -1,6 +1,6 @@
-/*
- * Blobscanner v. 0.1-a
- * by Antonio Molinaro 26/12/2013 (c) 
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * Demonstrates the new constructor's
  * usage and the setThreshold method.
  */

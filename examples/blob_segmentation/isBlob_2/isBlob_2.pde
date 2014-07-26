@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro - 08/12/2013.
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * The screen pixel is set after  
  * cheking if it is a blobs pixel or not.
  * (image based)

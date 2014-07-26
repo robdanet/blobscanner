@@ -1,6 +1,6 @@
-/*
-  Blobscanner v. 0.1-a
-  Antonio Molinaro (c) 08/12/2013
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
   An image segmentation example using isMatch method. The sketch starts
   in manual mode, segmenting the image on each mouse click.
   Pressing key 'l' the program enters in auto mode.

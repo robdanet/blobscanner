@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro (c) 17/12/2013.
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * Finds the number of blobs in the frame.
  * In this example the method findBlob(int[], int, int)
  * is used instead of imageFindBlobs(PImage).

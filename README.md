@@ -1,4 +1,4 @@
-		BLOBSCANNER PROCESSING LIBRARY VERSION 0.1-alpha
+		BLOBSCANNER PROCESSING LIBRARY VERSION 0.2-alpha
 
 Blobscanner is a library for the [Processing](http://processing.org) programming 
 environment. It's used for blob detection and analysis in image and video.

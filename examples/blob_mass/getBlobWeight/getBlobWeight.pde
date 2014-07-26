@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro - 08/12/2013.
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
  * Creates a syntetic blob image
  * and finds the blob mass.
  * If you click on the image the blob 

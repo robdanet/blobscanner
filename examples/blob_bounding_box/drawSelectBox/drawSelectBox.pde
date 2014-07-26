@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro (c) 09/12/2013.
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
  * Draws the blobs boundingbox only
  * for the blobs with mass equals or bigger
  * to the specified value.

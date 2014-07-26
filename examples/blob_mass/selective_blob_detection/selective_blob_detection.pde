@@ -1,6 +1,6 @@
 /* 
- * Blobscanner v. 0.1-a 
- * by Antonio Molinaro - 08/12/2013.
+ * Blobscanner v. 0.2-a  
+ * by Antonio Molinaro (c) 20/07/2013.
  * Computes the blobs in the video's frame
  * and draws the blob's contours and bounding box
  * choosing the color based on a weight threshold.

@@ -1,6 +1,6 @@
-/*
- * blobscanner v. 0.1-a 
- * Antonio Molinaro (c) 17/12/2013
+/* 
+ * Blobscanner v. 0.2-a 
+ * by Antonio Molinaro (c) 20/07/2014.
  * This sketch shows how to use the
  * new method seRoi(). When you press
  * a key, blobscanner search for blobs
