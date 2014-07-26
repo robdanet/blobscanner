@@ -1,10 +1,10 @@
 /**
- * Blobscanner 0.1-alpha 
+ * Blobscanner 0.2-alpha
  * Antonio Molinaro (c) 2014
  *
  * This program is a library for the Processing programming environment
  * (see <http://www.processing.org/>)and can be used for blob detection
- * and analysis in image and video. It can be also useful for image processing 
+ * and analysis in image and video. It can be also useful for image processing
  * and image segmentation.
  *
  * This program is free software and it is distributed
@@ -15,28 +15,27 @@
  * any later version.
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <a>http://www.gnu.org/licenses</a>.
+ * along with this program. If not, see <a>http://www.gnu.org/licenses</a>.
  *
  * For bugs and suggestions email to blobdetector.info@gmail.com or visit the
- * project site  <a>http://sites.google.com/site/blobscanner/home</a>.
+ * project site <a>http://sites.google.com/site/blobscanner/home</a>.
  *
- * @version 0.1-alpha
+ * @version 0.2-alpha
  * @author Antonio Molinaro
- * @date 18/01/14 15:26:48 
+ * @date 20/07/14 03:35:54
  *
  */
 
- package blobscanner;
- 
- import processing.core.PApplet;
- import processing.core.PImage;
- import processing.core.PVector;
- 
- 
+package blobscanner;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PVector;
+
 public class Detector {
 	/** The parent PApplet */
 	private PApplet p5;
@@ -59,10 +58,10 @@ public class Detector {
 	/** Neighbours y coordinates for labelling kernel. */
 	private final int[] dy = { -1, -1, -1, 0 };
 
-	/** Kernel of neighbours x coordinates used for blob's edge detection. */
+	/** Kernel of neighbours x coordinates used for the blob's edge detection. */
 	private final int xkern[] = { 1, 0, -1, 0, 1, -1, -1, 1 };
 
-	/** Kernel of neighbours y coordinates used for blob's edge detection. */
+	/** Kernel of neighbours y coordinates used for the blob's edge detection. */
 	private final int ykern[] = { 0, -1, 0, 1, -1, -1, 1, 1 };
 
 	/** Holds the blobs labels, one for each blob. */
@@ -77,7 +76,8 @@ public class Detector {
 	/** Holds the y coordinates of the blob's edge pixels */
 	private int[] edgeY;
 
-	/** The width of the rectangular area scanned for blobs. *///TODO change name 
+	/** The width of the rectangular area scanned for blobs. */
+	// TODO change name
 	private int w;
 
 	/** The height of the rectangular area scanned for blobs. */
@@ -97,10 +97,10 @@ public class Detector {
 
 	/** The total number of blobs for the current frame. */
 	private int blobNumber;
-	 
-	/** Region of interest variables @Since 0.1-a*/
 
- 	private int sroix;  
+	/** Region of interest variables @Since 0.1-a */
+
+	private int sroix;
 
 	private int sroiy;
 
@@ -112,30 +112,27 @@ public class Detector {
 	/**
 	 * The lists of coordinates of the four corners of the blob's bounding box.
 	 * 
-	 *  A---B 
-	 *  |   |
-	 *  C---D
+	 * A---B | | C---D
 	 */
-	private PVector[] A;//top left
-	private PVector[] B;//top right
-	private PVector[] C;//lower left
-	private PVector[] D;//lower right
-	
- 
+	private PVector[] A;// top left
+	private PVector[] B;// top right
+	private PVector[] C;// lower left
+	private PVector[] D;// lower right
+
 	/** The list of x coordinates of the blobs center of mass. */
 	private float[] CenterOfMX;
 
 	/** The list of y coordinates of the blobs center of mass. */
 	private float[] CenterOfMY;
-	
+
 	@Deprecated
 	/**
 	 * The list of coordinates of the the mid point on the blob's bounding box
 	 * side.
 	 */
 	private PVector[][] crosspoints;
-	
-	/** Variables used mainly to save  blob's bounding box. */
+
+	/** Variables used mainly to save blob's bounding box. */
 	private int Ax;
 	private int Ay;
 	private int Bx;
@@ -144,30 +141,35 @@ public class Detector {
 	private int Cy;
 	private int Dx;
 	private int Dy;
-	
+
 	private boolean blobWeighted = false;
 
-	public final static String VERSION = "v. 0.1-a";
+	public final static String VERSION = "v. 0.2-a";
 
 	/**
-	 * <code> Detector </code> class constructor.
-	 * This has been kept for backward compatibility.It'll get
-	 * deprecated in future versions.
-	 *  
-	 * @param p5 Reference to register with the host PApplet.
+	 * <code> Detector </code> class constructor. This has been kept for
+	 * backward compatibility. It'll get deprecated in future versions.
 	 * 
-	 * @param sx The x coordinate of the top left corner of the rectangular area
-	 * scanned for blobs.
+	 * @param p5
+	 *            Reference to register with the host PApplet.
 	 * 
-	 * @param sy The y coordinate of the top left corner of the rectangular area
-	 * scanned for blobs.
+	 * @param sx
+	 *            The x coordinate of the top left corner of the rectangular
+	 *            area scanned for blobs.
 	 * 
-	 * @param w The width of the rectangular area scanned for blobs.
+	 * @param sy
+	 *            The y coordinate of the top left corner of the rectangular
+	 *            area scanned for blobs.
 	 * 
-	 * @param h The height of the rectangular area scanned for blobs.
+	 * @param w
+	 *            The width of the rectangular area scanned for blobs.
 	 * 
-	 * @param threshold Blobscanner will search for blobs which brightness is
-	 * equals to this parameter's value.  
+	 * @param h
+	 *            The height of the rectangular area scanned for blobs.
+	 * 
+	 * @param threshold
+	 *            Blobscanner will search for blobs which brightness is equals
+	 *            to this parameter's value.
 	 */
 
 	public Detector(PApplet p5, int sx, int sy, int w, int h, int threshold) {
@@ -183,20 +185,20 @@ public class Detector {
 	}
 
 	/**
-	 * <code> Detector </code> class new constructor.
-	 * Initialise the starting point and size of the area 
-	 * scanned for blobs to a default corresponding to the 
-	 * parent PApplet size. Use <code>setRoi()</code> to modify
-	 * this parameters.
+	 * <code> Detector </code> class new constructor. Initialise the starting
+	 * point and size of the area scanned for blobs to a default corresponding
+	 * to the parent PApplet size. Use <code>setRoi()</code> to modify this
+	 * parameters.
+	 * 
 	 * @link #setRoi
-	 * @Since 0.1-alpha  
+	 * @Since 0.1-alpha
 	 * @param p5
 	 *            Reference to register with the host PApplet.
 	 * @param threshold
 	 *            Blobscanner will search for blobs which brightness is equals
 	 *            to this parameter's value.
 	 */
-	
+
 	public Detector(PApplet p5, int threshold) {
 
 		this.threshold = threshold;
@@ -207,23 +209,22 @@ public class Detector {
 		this.h = p5.height;
 		MyLabels = new int[h][w];
 		MyGroup = new int[h][w];
-
 	}
-	
+
 	/**
-	 * <code> Detector </code> class new constructor.
-	 * Initialise the starting point and size of the area 
-	 * scanned for blobs to a default corresponding to the 
-	 * parent PApplet size. Use <code>setRoi()</code> to modify
-	 * this parameters.
+	 * <code> Detector </code> class new constructor. Initialise the starting
+	 * point and size of the area scanned for blobs to a default corresponding
+	 * to the parent PApplet size. Use <code>setRoi()</code> to modify this
+	 * parameters.
+	 * 
 	 * @link #setRoi
-	 * @Since 0.1-alpha  
+	 * @Since 0.1-alpha
 	 * @param p5
 	 *            Reference to register with the host PApplet.
-     */
-	
+	 */
+
 	public Detector(PApplet p5) {
-		
+
 		this.p5 = p5;
 		this.sx = 0;
 		this.sy = 0;
@@ -231,231 +232,221 @@ public class Detector {
 		this.h = p5.height;
 		MyLabels = new int[h][w];
 		MyGroup = new int[h][w];
-    }
-	
+	}
+
 	/**
-	 * Sets the brightness value of the blobs to be detected.
-         * Use this method only on objects created with the 
-	 * new constructor Detector(PApplet).
+	 * Sets the brightness value of the blobs to be detected. Use this method
+	 * only on objects created with the new constructor Detector(PApplet).
 	 * 
-	 * @param
-	 * 			threshold The brightness value of the blobs to be detected. 
+	 * @param threshold
+	 *            The brightness value of the blobs to be detected.
 	 */
-	public void setThreshold(int val){
+	public void setThreshold(int val) {
 		threshold = val;
 	}
-	
+
 	/**
 	 * Returns the brightness value of the blobs searched.
 	 * 
-	 * @return
-	 * 		 The brightness value of the blobs to be detected. 
+	 * @return The brightness value of the blobs to be detected.
 	 */
-	public int getThreshold(){
-		return threshold ;
+	public int getThreshold() {
+		return threshold;
 	}
- 
+
 	/**
-	 * Defines a Region Of Interest where Blobscanner will search for blobs.
-	 * Use this method only on objects created with the 
-	 * new constructor Detector(PApplet, int).
+	 * Defines a Region Of Interest where Blobscanner will search for blobs. Use
+	 * this method only on objects created with the new constructor
+	 * Detector(PApplet, int).
 	 * 
 	 * @Since 0.1-alpha
-	 * @param sroix Coordinate x of ROI starting point.
+	 * @param sroix
+	 *            Coordinate x of ROI starting point.
 	 * 
-	 * @param sroiy Coordinate y of ROI starting point.
+	 * @param sroiy
+	 *            Coordinate y of ROI starting point.
 	 * 
-	 * @param roiw Width of ROI.
+	 * @param roiw
+	 *            Width of ROI.
 	 * 
-	 * @param roih Height of ROI.
+	 * @param roih
+	 *            Height of ROI.
 	 */
- 
-  	public void setRoi(int sroix,int sroiy,int roiw,int roih)
-	{
-		try
-		{
-		 	 this.sroix = sroix;
-			 this.sroiy = sroiy;
-			 sx = 0;
-			 sy = 0;
-			 w =  roiw;
-			 h =  roih;
-			 MyLabels = new int[h][w];
-			 MyGroup = new int[h][w];
-			 roiIsSet = true;
+
+	public void setRoi(int sroix, int sroiy, int roiw, int roih) {
+		try {
+			this.sroix = sroix;
+			this.sroiy = sroiy;
+			sx = 0;
+			sy = 0;
+			w = roiw;
+			h = roih;
+			MyLabels = new int[h][w];
+			MyGroup = new int[h][w];
+			roiIsSet = true;
+		} catch (NegativeArraySizeException e) {
+
+			PApplet.println("Error!:"
+					+ "The first two arguments of setRoi must represent\n"
+					+ "the top-left corner of the region of interest."
+					+ version());
+
 		}
-		catch(NegativeArraySizeException e)
-		{
-			 
-			 PApplet.println("Error!:" +
-					 "The first two arguments of setRoi must represent\n" +
-					 "the top-left corner of the region of interest." +
-					   version());
-			 
-		}
-		 
+
 	}
-	
+
 	/**
 	 * Resets all global parameters and buffers.
 	 */
-	public void unsetRoi(){  
-		if(roiIsSet){
+	public void unsetRoi() {
+		if (roiIsSet) {
 			sx = 0;
 			sy = 0;
-			w = p5.width; 
+			w = p5.width;
 			h = p5.height;
 			MyLabels = new int[h][w];
 			MyGroup = new int[h][w];
 			roiIsSet = false;
-		}
-		else
-		{
-			PApplet.println("Roi is not set\nunset operation failed.\n" +
-						version());
+		} else {
+			PApplet.println("Roi is not set\nunset operation failed.\n"
+					+ version());
 		}
 	}
-	
+
 	/**
 	 * Returns the four parameters of ROI
 	 * 
 	 * @return An array of int filled with the values of the roi parameters.
 	 */
-	public int[] getRoiParameters()
-	{
-		int []parameters = new int[4];
-		if(roiIsSet){
-				 
-				parameters[0] = sroix;
-				parameters[1] = sroiy;
-				parameters[2] = w;
-				parameters[3] = h;
-		}
-		else 
-		{
-			PApplet.println("Error!:\nRoi is not set. Please use first setRoi\n" +
-							"to define a region of interest,\n" +
-							"before calling getRoiParameters\n" +
-					version());
+	public int[] getRoiParameters() {
+		int[] parameters = new int[4];
+		if (roiIsSet) {
+
+			parameters[0] = sroix;
+			parameters[1] = sroiy;
+			parameters[2] = w;
+			parameters[3] = h;
+		} else {
+			PApplet.println("Error!:\nRoi is not set. Please use first setRoi\n"
+					+ "to define a region of interest,\n"
+					+ "before calling getRoiParameters\n" + version());
 		}
 		return parameters;
-	 }
-	 
-	
+	}
+
 	/**
-	 * Initialises the labels buffer.
+	 * Clean the labels buffer for next frame in video.
 	 */
-	
+
 	private void initBuffers() {
 
 		for (int y = sy; y < h; y++) {
 			for (int x = sx; x < w; x++) {
 				MyLabels[y][x] = 0;
-				 MyGroup[y][x] = 0;
+				MyGroup[y][x] = 0;
 			}
 		}
 	}
-	
+
 	/**
 	 * Compute the connected components and fills the label buffer.
 	 */
-	
+
 	private void doLabel() {
 
-            // start labelling from 1
-            Label = 1; 
-	    int sumTest = 0;
+		// start labelling from 1
+		Label = 1;
+		int sumTest = 0;
 
-	    // The smallest label found locally
-            // when dx[] and dy[] kernels are applied.
-	    int smallLabel = 0;
+		// The smallest label found locally
+		// when dx[] and dy[] kernels are applied.
+		int smallLabel = 0;
 
 		for (int y = sy; y < h; y++) {
 			for (int x = sx; x < w; x++) {
 
-				 
-					// if is a blob's pixel apply kernel
-					if (MyGroup[y][x] == 1) {
-						for (int i = 0; i < 4; i++) {
-							if(inside(x + dx[i],y + dy[i]))
+				// if is a blob's pixel apply kernel
+				if (MyGroup[y][x] == 1) {
+					for (int i = 0; i < 4; i++) {
+						if (inside(x + dx[i], y + dy[i]))
 							sumTest += MyLabels[y + dy[i]][x + dx[i]];
-						}
-						// if the local sum is 0
-						if (sumTest == 0) {
-							// assigns new label
-							MyLabels[y][x] = Label;
-							// increment label
-							Label++;
-						} else {
-							// reset for next pixel
-							sumTest = 0;
-							// find the smallest label...
-							int labelLocalList[] = new int[4];
+					}
+					// if the local sum is 0
+					if (sumTest == 0) {
+						// assigns new label
+						MyLabels[y][x] = Label;
+						// increment label
+						Label++;
+					} else {
+						// reset for next pixel
+						sumTest = 0;
+						// find the smallest label...
+						int labelLocalList[] = new int[4];
 
-							for (int i = 0; i < 4; i++) {
-								if(inside(x + dx[i],y + dy[i]))
+						for (int i = 0; i < 4; i++) {
+							if (inside(x + dx[i], y + dy[i]))
 								labelLocalList[i] = MyLabels[y + dy[i]][x
-								                                        + dx[i]];
-							}
-							labelLocalList = PApplet.sort(labelLocalList);
-						 
-							 smallLabel = res4(labelLocalList);
-							// label the matrix space...
-							for (int i = 0; i < 4; i++) {
-								if(inside(x + dx[i],y + dy[i]))
+										+ dx[i]];
+						}
+						labelLocalList = PApplet.sort(labelLocalList);
+
+						smallLabel = res4(labelLocalList);
+						// label the matrix space...
+						for (int i = 0; i < 4; i++) {
+							if (inside(x + dx[i], y + dy[i]))
 								if (MyGroup[y + dy[i]][x + dx[i]] == 1) {
 									MyLabels[y + dy[i]][x + dx[i]] = smallLabel;
 								}
-							} 
-							// ..and finally assign the label
-							// to the pixel @ (x,y) position
-							MyLabels[y][x] = smallLabel;
 						}
+						// ..and finally assign the label
+						// to the pixel @ (x,y) position
+						MyLabels[y][x] = smallLabel;
 					}
-				 }
-			}
-			
-		// repeat in inverse direction to merge
-		// blobs with more than a label
-		for (int y = h-1; y >= sy; y--) {
-			for (int x = w-1; x >= sx; x--) {
-
-				 
-				    if (MyLabels[y][x] > 0) {
-						int labelLocallList_2[] = new int[4];
-						for (int i = 0; i < 4; i++) {
-							if(inside(x + dx[i],y + dy[i]))
-							labelLocallList_2[i] = MyLabels[y + dy[i]][x + dx[i]];
-						}
-						labelLocallList_2 = PApplet.sort(labelLocallList_2); 
-				       	        smallLabel = res4(labelLocallList_2);
-				        
-						for (int i = 0; i < 4; i++) {
-							if(inside(x + dx[i],y + dy[i]))
-							if (MyLabels[y + dy[i]][x + dx[i]] != 0
-									&& MyGroup[y][x] == 1) {
-								MyLabels[y + dy[i]][x + dx[i]] = smallLabel;
-							}
-						}
-					}	
 				}
 			}
 		}
 
+		// repeat in inverse direction to merge
+		// together blobs with more than one label
+		for (int y = h - 1; y >= sy; y--) {
+			for (int x = w - 1; x >= sx; x--) {
+
+				if (MyLabels[y][x] > 0) {
+					int labelLocallList_2[] = new int[4];
+					for (int i = 0; i < 4; i++) {
+						if (inside(x + dx[i], y + dy[i]))
+							labelLocallList_2[i] = MyLabels[y + dy[i]][x
+									+ dx[i]];
+					}
+					labelLocallList_2 = PApplet.sort(labelLocallList_2);
+					smallLabel = res4(labelLocallList_2);
+
+					for (int i = 0; i < 4; i++) {
+						if (inside(x + dx[i], y + dy[i]))
+							if (MyLabels[y + dy[i]][x + dx[i]] != 0
+									&& MyGroup[y][x] == 1) {
+								MyLabels[y + dy[i]][x + dx[i]] = smallLabel;
+							}
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Creates a buffer to hold a label for each blob.
 	 */
-	 
+
 	private void createLabelTab() {
-		 
-	    int labelTab[];
+
+		int labelTab[];
 		int index = 0;
 		blobNumber = 0;
-		 
-		 if (countBlobPixel > 0) {
-	      labelTab = new int[countBlobPixel];
-	      labelTab2 = new int[countBlobPixel]; 
-			
+
+		if (countBlobPixel > 0) {
+			labelTab = new int[countBlobPixel];
+			labelTab2 = new int[countBlobPixel];
+
 			for (int y = sy; y < h; y++) {
 				for (int x = sx; x < w; x++) {
 					if (MyGroup[y][x] == 1 && MyLabels[y][x] > 0) {
@@ -467,34 +458,33 @@ public class Detector {
 
 				}
 			}
-		  
 
-			 labelTab = PApplet.sort(labelTab);
-			 
-			 labelTab2 = res3(labelTab);
-			 
-			 blobNumber = labelTab2 .length;
+			labelTab = PApplet.sort(labelTab);
 
-		 }
+			labelTab2 = res3(labelTab);
+
+			blobNumber = labelTab2.length;
+
+		}
 	}
-	
-	
+
 	/**
 	 * Check if inside image's or roi's boundaries.
+	 * 
 	 * @param x
-	 * 			X coordinate of the point to check.
+	 *            X coordinate of the point to check.
 	 * @param y
-	 * 			Y coordinate of the point to check.
+	 *            Y coordinate of the point to check.
 	 */
-	
+
 	private boolean inside(int x, int y) {
- 
-			if(x < w && x >=  0 && y < h && y >=  0)
+
+		if (x < w && x >= 0 && y < h && y >= 0)
 			return true;
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Removes all 0s values from <code> arra </code> condensing the rest of the
 	 * values.
@@ -504,7 +494,7 @@ public class Detector {
 	 * @return a The new array with the condensed values.
 	 */
 
-   	private int[] res3(int[] arra) {
+	private int[] res3(int[] arra) {
 		int[] ar = new int[arra.length];
 		int index = 0;
 
@@ -532,54 +522,42 @@ public class Detector {
 			}
 		}
 		return a;
-	}  
-	
- /* private int[] res3 ( int [] args ) {//TODO using this causes to generate  
-	  				//Array Index Out Of Bounds Exception in
-	 				//the array which receive the return. WHY??
-	    int previous = 0;
-	    int count = 0;
-	    int[]result = new int[args.length] ;
-	    for ( int i = 0; i < args.length; i++ )
-	    {
-	      if (   args[i]!=  previous && args[i]!=0 )
-	      {
-	         result[count] = args[i] ;
-	        previous = args[i];
-	        count++;
-	      }
-	    } 
-	    int []b = new int[count];
-	    for(int i=0; i<count; i++){
-	      b[i] = result[i];
-	    }
-	    return  b;
-	  } */
-    
-	/**
-	 *  Returns the smallest non 0 value
-	 *  from the argument (sorted) array.
-	 *  @param arra The array to search.
-	 *  @return The smallest non 0 value in <code><b>arra</b></code>.
+	}
+
+	/*
+	 * private int[] res3 ( int [] args ) {//TODO using this causes to generate
+	 * //Array Index Out Of Bounds Exception in //the array which receive the
+	 * return. WHY?? int previous = 0; int count = 0; int[]result = new
+	 * int[args.length] ; for ( int i = 0; i < args.length; i++ ) { if (
+	 * args[i]!= previous && args[i]!=0 ) { result[count] = args[i] ; previous =
+	 * args[i]; count++; } } int []b = new int[count]; for(int i=0; i<count;
+	 * i++){ b[i] = result[i]; } return b; }
 	 */
-	
-	private int  res4(int arra[]) {
-		  
-	    int r = 0;
-	   
-	   for (int i = 0; i < arra.length; i++) {
-	      
-	      if(arra[i]!=0){
-	        r=i;
-	    
-	        break;
-	      }
-	    }
-	     
-	     return (arra[r]);
-	  }
-	
- 
+
+	/**
+	 * Returns the smallest non 0 value from the argument (sorted) array.
+	 * 
+	 * @param arra
+	 *            The array to search.
+	 * @return The smallest non 0 value in <code><b>arra</b></code>.
+	 */
+
+	private int res4(int arra[]) {
+
+		int r = 0;
+
+		for (int i = 0; i < arra.length; i++) {
+
+			if (arra[i] != 0) {
+				r = i;
+
+				break;
+			}
+		}
+
+		return (arra[r]);
+	}
+
 	/**
 	 * Finds all the blob's pixels and saves them into the blob pixel buffer
 	 * <code>MyGroup</code>.
@@ -588,50 +566,49 @@ public class Detector {
 	 *            The screen buffer to scan for blobs.
 	 * @param trueWidth
 	 *            The width of the image or video's frame to search for blobs.
-	 *
+	 * 
 	 */
 
 	public void findBlobs(int[] pix_array, int trueWidth, int trueHeight) {
 
 		countBlobPixel = 0;
-		initBuffers(); 
-		
+		initBuffers();
+
 		if (threshold > 255)
 			threshold = 255;
 		if (threshold < 0)
 			threshold = 0;
 
 		if (roiIsSet == false) {
- 
-			for (int y = sy; y <  trueHeight; y++) {
+
+			for (int y = sy; y < trueHeight; y++) {
 				for (int x = sx; x < trueWidth; x++) {
-					
+
 					// if is blob label with 1
 					if (threshold == p5
 							.brightness(pix_array[x + y * trueWidth])) {
 						MyGroup[y][x] = 1;
-						
-						// total blob's pixels 
-						countBlobPixel++; 
+
+						// total blob's pixels
+						countBlobPixel++;
 					} else {
 						MyGroup[y][x] = 0;
 					}
 				}
 			}
- 
-		} 
-		else {//reads from inside the roi area
 
-			for (int y = sy; y < h; y++) {//[10]
+		} else {// reads from inside the roi area
+
+			for (int y = sy; y < h; y++) {// [10]
 				for (int x = sx; x < w; x++) {
-					 
+
 					// if is blob label with 1
-					if (threshold == p5
-							.brightness(pix_array[(sroix+x) + ((sroiy+y) * trueWidth)])) {
+					if (threshold == p5.brightness(pix_array[(sroix + x)
+							+ ((sroiy + y) * trueWidth)])) {
 						MyGroup[y][x] = 1;
-						
+
 						// total blob's pixels
-						countBlobPixel++; 
+						countBlobPixel++;
 					} else {
 						MyGroup[y][x] = 0;
 					}
@@ -644,29 +621,29 @@ public class Detector {
 
 	}
 
-    /**
+	/**
 	 * Like <code>findBlobs(int[],int,int)</code> but to be used with a PImage
 	 * object.
 	 * 
 	 * @param img
 	 *            PImage to scan for blobs.
 	 */
-	
+
 	public void imageFindBlobs(PImage img) {
 
 		countBlobPixel = 0;
 		initBuffers();
-		
+
 		if (threshold > 255)
 			threshold = 255;
 		if (threshold < 0)
 			threshold = 0;
 
 		if (roiIsSet == false) {
- 
+
 			for (int y = sy; y < h; y++) {
 				for (int x = sx; x < w; x++) {
-					
+
 					// if is blob label with 1
 					if (threshold == p5.brightness(img.get(x, y))) {
 						MyGroup[y][x] = 1;
@@ -676,35 +653,35 @@ public class Detector {
 					}
 				}
 			}
- 
-		}
-		else {//reads from inside the roi area
- 
-			for (int y = sy; y < h; y++) {//[13]
+
+		} else {// reads from inside the roi area
+
+			for (int y = sy; y < h; y++) {// [13]
 				for (int x = sx; x < w; x++) {
 					// if is blob label with 1
-					if (threshold == p5.brightness(img.get(sroix+x, sroiy+y))) {
-						
-					    	MyGroup[y][x] = 1;
-					    	countBlobPixel++;// total blob's pixels
-					
-					} else { 
-							MyGroup[y][x] = 0;
+					if (threshold == p5.brightness(img
+							.get(sroix + x, sroiy + y))) {
+
+						MyGroup[y][x] = 1;
+						countBlobPixel++;// total blob's pixels
+
+					} else {
+						MyGroup[y][x] = 0;
 					}
 				}
-			} 
-		 }
+			}
+		}
 
 		doLabel();
 		createLabelTab();
- }
+	}
 
 	/**
-	 * Calculates the single blob's weight (mass) for each frame or image.
-	 * This method must be called before calling the following methods:<br>
+	 * Calculates the single blob's weight (mass) for each frame or image. This
+	 * method must be called before calling the following methods:<br>
 	 * <code>getBlobWeight()</code> <br>
 	 * <code>getBlobWeightLabel()</code><br>
-	 * <code>drawSelectBox() </code><br> 
+	 * <code>drawSelectBox() </code><br>
 	 * <code>drawSelectContours()</code><br>
 	 * <code>findBlobs()</code><br>
 	 * <code>imageFindBlobs()</code>
@@ -713,7 +690,7 @@ public class Detector {
 	 *            If <code> true,</code> the method prints a message to the
 	 *            console when zero blobs are found.
 	 */
-	
+
 	public void weightBlobs(boolean printConsoleIfNoBlobs) {
 
 		int bPix = 0;
@@ -722,20 +699,20 @@ public class Detector {
 
 			blobWeightList = new int[blobNumber];
 
-		 	boolean cerca = true; 
+			boolean cerca = true;
 
 			for (int i = 0; i < blobNumber; i++) {
 
-				for (int y = sy  ; y < h  ; y++) { 
-					for (int x = sx  ; x < w  ; x++) {
-						 
-						 if (labelTab2[i] == MyLabels[y][x]) { 
-							 
+				for (int y = sy; y < h; y++) {
+					for (int x = sx; x < w; x++) {
+
+						if (labelTab2[i] == MyLabels[y][x]) {
+
 							bPix++;
 							cerca = true;
-						
-						 } else if (cerca) {
-							
+
+						} else if (cerca) {
+
 							blobWeightList[i] += bPix;
 							cerca = false;
 							bPix = 0;
@@ -743,10 +720,9 @@ public class Detector {
 					}
 				}
 			}
-		} 
-		else {											  
-			if (printConsoleIfNoBlobs)						 
-				PApplet.println(" !!! zero blobs found !!!"); 
+		} else {
+			if (printConsoleIfNoBlobs)
+				PApplet.println(" !!! zero blobs found !!!");
 		}
 		blobWeighted = true;
 	}
@@ -755,45 +731,45 @@ public class Detector {
 	 * Draws the edge of each blob.
 	 * 
 	 * @param contoursColor
-	 *            The edges color. Here can be passed <code>color( r, g, b)</code>.
+	 *            The edges color. Here can be passed
+	 *            <code>color( r, g, b)</code>.
 	 * @param thickness
-	 *            The edges thickness. 
-	 *            <code>findBlobs()</code> or
+	 *            The edges thickness. <code>findBlobs()</code> or
 	 *            <code>imageFindBlobs(PImage)</code> must be called first to
 	 *            call this method.
 	 */
 
 	public void drawContours(int contoursColor, float thickness) {
-		if(blobNumber > 0)
-		if(roiIsSet)
-		for (int y = sy  ; y < h ; y++) { 
-			for (int x = sx  ; x < w  ; x++) {
+		if (blobNumber > 0)
+			if (roiIsSet)
+				for (int y = sy; y < h; y++) {
+					for (int x = sx; x < w; x++) {
 
-				if (MyLabels[y][x] > 0 && is_edge(x, y)) {
- 
-					p5.stroke(contoursColor);
-					p5.strokeWeight(thickness);
+						if (MyLabels[y][x] > 0 && is_edge(x, y)) {
 
-					p5.point(sroix+x, sroiy+y);
+							p5.stroke(contoursColor);
+							p5.strokeWeight(thickness);
 
-				}
-			}
-		}
-		else  
-			for (int y = sy  ; y < h ; y++) { 
-				for (int x = sx  ; x < w  ; x++) {
+							p5.point(sroix + x, sroiy + y);
 
-					if (MyLabels[y][x] > 0 && is_edge(x, y)) {
-	 
-						p5.stroke(contoursColor);
-						p5.strokeWeight(thickness);
-
-						p5.point( x,  y);
-
+						}
 					}
 				}
-			}
- 
+			else
+				for (int y = sy; y < h; y++) {
+					for (int x = sx; x < w; x++) {
+
+						if (MyLabels[y][x] > 0 && is_edge(x, y)) {
+
+							p5.stroke(contoursColor);
+							p5.strokeWeight(thickness);
+
+							p5.point(x, y);
+
+						}
+					}
+				}
+
 		// reset to default strokeWeight and stroke
 		p5.stroke(0);
 		p5.strokeWeight(1);
@@ -803,87 +779,90 @@ public class Detector {
 	 * Draws the contour only for blobs which weight is bigger than or equals to
 	 * <code> minimumWeight</code> parameter value. <code>findBlobs()</code> or
 	 * <code>imageFindBlobs(PImage)</code>, <code> weightBlobs(boolean) </code>
-	 * and <code>loadBlobsFeatures() </code>must be called before to
-	 * call this method.
+	 * and <code>loadBlobsFeatures() </code>must be called before to call this
+	 * method.
 	 * 
 	 * @param minimumWeight
 	 *            The minimum weight of the blobs for which the contour is drawn
 	 * @param contoursColor
-	 *            The pixel's edge color. 
+	 *            The pixel's edge color.
 	 * @param thickness
 	 *            The edge thickness.
 	 * @see loadBlobsFeatures()
 	 * @see weightBlobs(boolean)
 	 **/
-	
-	public void drawSelectContours(int minimumWeight, int contoursColor, float thickness) {
-	
-		if(blobWeighted && blobNumber > 0){
-		if(roiIsSet)
-	 
-		for (int y = sy  ; y < h  ; y++) {
-			for (int x = sx ; x < w  ; x++) {
-	
-				if (MyLabels[y][x] > 0 && is_edge(x, y)
-						&& getBlobWeightLabel(get_label(x, y)) >= minimumWeight) {
-						
-						p5.stroke(contoursColor);
-						p5.strokeWeight(thickness);
-						p5.point(sroix+x,sroiy+y);
-	
-				}
-			}
-		}
-		else  
-		for (int y = sy  ; y < h  ; y++) {
-			for (int x = sx ; x < w  ; x++) {
-	
-					if (MyLabels[y][x] > 0 && is_edge(x, y)
-						&& getBlobWeightLabel(get_label(x, y)) >= minimumWeight) {
-	
+
+	public void drawSelectContours(int minimumWeight, int contoursColor,
+			float thickness) {
+
+		if (blobWeighted && blobNumber > 0) {
+			if (roiIsSet)
+
+				for (int y = sy; y < h; y++) {
+					for (int x = sx; x < w; x++) {
+
+						if (MyLabels[y][x] > 0
+								&& is_edge(x, y)
+								&& getBlobWeightLabel(get_label(x, y)) >= minimumWeight) {
+
 							p5.stroke(contoursColor);
 							p5.strokeWeight(thickness);
-							p5.point(x, y);
-	
+							p5.point(sroix + x, sroiy + y);
+
 						}
 					}
 				}
-	 
+			else
+				for (int y = sy; y < h; y++) {
+					for (int x = sx; x < w; x++) {
+
+						if (MyLabels[y][x] > 0
+								&& is_edge(x, y)
+								&& getBlobWeightLabel(get_label(x, y)) >= minimumWeight) {
+
+							p5.stroke(contoursColor);
+							p5.strokeWeight(thickness);
+							p5.point(x, y);
+
+						}
+					}
+				}
+
 			p5.stroke(0);
 			p5.strokeWeight(1);
-		}
-		else if(!blobWeighted){
-			PApplet.println("Blobscanner error! :\n" +
-					"before using drawSelectContours you must call weigthBlobs");
+		} else if (!blobWeighted) {
+			PApplet.println("Blobscanner error! :\n"
+					+ "before using drawSelectContours you must call weigthBlobs");
 		}
 	}
 
 	/**
-	 * Draws the blob contour for the blob specified by <code> blobnumber</code>.
-	 *  <code>findBlobs()</code> or
-	 * <code>imageFindBlobs(PImage)</code> and <code>loadBlobsFeatures() </code>
-	 * must be called before to call this method.
+	 * Draws the blob contour for the blob specified by <code> blobnumber</code>
+	 * . <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code> and
+	 * <code>loadBlobsFeatures() </code> must be called before to call this
+	 * method.
 	 * 
 	 * @param blobnumber
 	 *            The blob which contours are drawn
 	 * @param contourColor
-	 *            The contour's color. 
+	 *            The contour's color.
 	 * @param thickness
-	 *            The contour thickness. 
-	 * @see  loadBlobsFeatures()
+	 *            The contour thickness.
+	 * @see loadBlobsFeatures()
 	 **/
-	
-	public void drawBlobContour(int blobnumber, int contourColor, float thickness) { 
+
+	public void drawBlobContour(int blobnumber, int contourColor,
+			float thickness) {
 
 		p5.stroke(contourColor);
 		p5.strokeWeight(thickness);
 
 		PVector[] edge = getEdgePoints(blobnumber);
- 
+
 		for (int i = 0; i < edge.length; i++) {
-			p5.point(edge[i].x ,edge[i].y ); 
-		}											  
-  
+			p5.point(edge[i].x, edge[i].y);
+		}
+
 		p5.stroke(0);
 		p5.strokeWeight(1);
 	}
@@ -897,8 +876,8 @@ public class Detector {
 	 *            <code>stroke</code> Processing's method.
 	 *            <code>findBlobs()</code> or
 	 *            <code>imageFindBlobs(PImage)</code>,
-	 *            <code>loadBlobsFeatures() </code>must be called
-	 *            before to call this method.
+	 *            <code>loadBlobsFeatures() </code>must be called before to call
+	 *            this method.
 	 * @param thickness
 	 *            The bounding box thickness.
 	 */
@@ -906,27 +885,31 @@ public class Detector {
 	public void drawBox(int boxColor, float thickness) {
 		p5.stroke(boxColor);
 		p5.strokeWeight(thickness);
-		
-		if (blobNumber > 0)   
-		if(roiIsSet) {
-		 
-			 for (int i = 0; i < blobNumber; i++) {
-				p5.line(sroix+A[i].x,sroiy+A[i].y,sroix+B[i].x,sroiy+B[i].y);
-				p5.line(sroix+B[i].x,sroiy+B[i].y,sroix+D[i].x,sroiy+D[i].y);
-				p5.line(sroix+A[i].x,sroiy+A[i].y,sroix+C[i].x,sroiy+C[i].y);
-				p5.line(sroix+C[i].x,sroiy+C[i].y,sroix+D[i].x,sroiy+D[i].y);
-			}
-		}
-		else  {
-			 
-				 
+
+		if (blobNumber > 0)
+			if (roiIsSet) {
+
 				for (int i = 0; i < blobNumber; i++) {
-					p5.line( A[i].x, A[i].y, B[i].x, B[i].y);
-					p5.line( B[i].x, B[i].y, D[i].x, D[i].y);
-					p5.line( A[i].x, A[i].y, C[i].x, C[i].y);
-					p5.line( C[i].x, C[i].y, D[i].x, D[i].y);
+					p5.line(sroix + A[i].x, sroiy + A[i].y, sroix + B[i].x,
+							sroiy + B[i].y);
+					p5.line(sroix + B[i].x, sroiy + B[i].y, sroix + D[i].x,
+							sroiy + D[i].y);
+					p5.line(sroix + A[i].x, sroiy + A[i].y, sroix + C[i].x,
+							sroiy + C[i].y);
+					p5.line(sroix + C[i].x, sroiy + C[i].y, sroix + D[i].x,
+							sroiy + D[i].y);
 				}
- 			 }
+			} else {
+
+				for (int i = 0; i < blobNumber; i++) {
+
+					p5.line(A[i].x, A[i].y, B[i].x, B[i].y);
+					p5.line(B[i].x, B[i].y, D[i].x, D[i].y);
+					p5.line(A[i].x, A[i].y, C[i].x, C[i].y);
+					p5.line(C[i].x, C[i].y, D[i].x, D[i].y);
+
+				}
+			}
 		p5.stroke(0);
 		p5.strokeWeight(1);
 	}
@@ -950,44 +933,53 @@ public class Detector {
 	 */
 
 	public void drawSelectBox(int minimumWeight, int boxColor, float thickness) {
-		if(blobNumber > 0 && blobWeighted){
+		if (blobNumber > 0 && blobWeighted) {
+
 			p5.stroke(boxColor);
 			p5.strokeWeight(thickness);
- 
-			if(roiIsSet){
-				 
-					for (int i = 0; i < blobNumber; i++) {
-						if (getBlobWeight(i) >= minimumWeight) {
-							p5.line(sroix+A[i].x,sroiy+A[i].y,sroix+B[i].x,sroiy+B[i].y);
-							p5.line(sroix+B[i].x,sroiy+B[i].y,sroix+D[i].x,sroiy+D[i].y);
-							p5.line(sroix+A[i].x,sroiy+A[i].y,sroix+C[i].x,sroiy+C[i].y);
-							p5.line(sroix+C[i].x,sroiy+C[i].y,sroix+D[i].x,sroiy+D[i].y);
-						}
+
+			if (roiIsSet) {
+
+				for (int i = 0; i < blobNumber; i++) {
+					if (getBlobWeight(i) >= minimumWeight) {
+
+						p5.line(sroix + A[i].x, sroiy + A[i].y, sroix + B[i].x,
+								sroiy + B[i].y);
+						p5.line(sroix + B[i].x, sroiy + B[i].y, sroix + D[i].x,
+								sroiy + D[i].y);
+						p5.line(sroix + A[i].x, sroiy + A[i].y, sroix + C[i].x,
+								sroiy + C[i].y);
+						p5.line(sroix + C[i].x, sroiy + C[i].y, sroix + D[i].x,
+								sroiy + D[i].y);
+
 					}
+				}
+			} else {
+
+				for (int i = 0; i < blobNumber; i++) {
+					if (getBlobWeight(i) >= minimumWeight) {
+
+						p5.line(A[i].x, A[i].y, B[i].x, B[i].y);
+						p5.line(B[i].x, B[i].y, D[i].x, D[i].y);
+						p5.line(A[i].x, A[i].y, C[i].x, C[i].y);
+						p5.line(C[i].x, C[i].y, D[i].x, D[i].y);
+
+					}
+				}
 			}
-			else {
-				 
-					for (int i = 0; i < blobNumber; i++) {
-						if (getBlobWeight(i) >= minimumWeight) {
-							p5.line( A[i].x, A[i].y, B[i].x, B[i].y);
-							p5.line( B[i].x, B[i].y, D[i].x, D[i].y);
-							p5.line( A[i].x, A[i].y, C[i].x, C[i].y);
-							p5.line( C[i].x, C[i].y, D[i].x, D[i].y);
-						}
-					}
-			 }
- 
+
 			// reset to default strokeWeight and stroke
 			p5.stroke(0);
 			p5.strokeWeight(1);
-		}
-		else if(!blobWeighted){
-			PApplet.println("Blobscanner error! :\n" +
-					"before using drawSelectBox you must call weigthBlobs");
-		}
-	}
 
-	 
+		} else if (!blobWeighted) {
+
+			PApplet.println("Blobscanner error! :\n"
+					+ "before using drawSelectBox you must call weigthBlobs");
+
+		}
+
+	}
 
 	/**
 	 * Returns true if at x y location finds a blob pixel.
@@ -1000,14 +992,17 @@ public class Detector {
 	 *            The y location of the pixel to check.
 	 * @return Returns true if at x y location finds a blob pixels.
 	 */
-		 
-	public boolean isBlob(int x, int y) { 
-		if (roiIsSet && inside(x-sroix, y-sroix) && MyLabels[y-sroiy][x-sroix] > 0) {
+
+	public boolean isBlob(int x, int y) {
+
+		if (roiIsSet && inside(x - sroix, y - sroix)
+				&& MyLabels[y - sroiy][x - sroix] > 0) {
 			return true;
-		} else if(!roiIsSet && inside(x, y) && MyLabels[y][x] > 0){
+		} else if (!roiIsSet && inside(x, y) && MyLabels[y][x] > 0) {
 			return true;
 		} else {
 			return false;
+
 		}
 	}
 
@@ -1024,31 +1019,34 @@ public class Detector {
 	 *         pixel.
 	 */
 
-	public boolean isEdge(int x, int y) { 
+	public boolean isEdge(int x, int y) {
 
 		int count = 0;
-		 if(inside(x-sroix,y-sroiy))
-		 if (MyLabels[y-sroiy][x-sroix] > 0 )
-		 
-				for (int s = 0; s < 8; s++) {
-					 if (inside((x-sroix) + xkern[s], (y-sroiy) + ykern[s])  &&
-						 MyLabels[(y-sroiy) + ykern[s]][(x-sroix) + xkern[s]] == 0
- 
-									 || x-sroix == 0 || x-sroix  == (w - 1) 
-									 || y-sroiy == 0 || y-sroiy  == (h - 1))  {
+		if (inside(x - sroix, y - sroiy) && MyLabels[y - sroiy][x - sroix] > 0)
 
-							count++;
-							break;  
-						}
+			for (int s = 0; s < 8; s++) {
+				if (inside((x - sroix) + xkern[s], (y - sroiy) + ykern[s])
+						&& MyLabels[(y - sroiy) + ykern[s]][(x - sroix)
+								+ xkern[s]] == 0
+
+						|| x - sroix == 0 || x - sroix == (w - 1)
+						|| y - sroiy == 0 || y - sroiy == (h - 1)) {
+
+					count++;
+					break;
 				}
+			}
+
 		if (count > 0)
 			return true;
 		else
 			return false;
+
 	}
-	
+
 	/**
 	 * Returns true if the pixel at x y coordinates is a blob edge pixel.
+	 * 
 	 * @param x
 	 *            The screen x coordinate to check.
 	 * @param y
@@ -1056,30 +1054,30 @@ public class Detector {
 	 * @return Returns true if the pixel at x y coordinates is a blob edge
 	 *         pixel.
 	 */
-	
-	
-	private boolean is_edge(int x, int y) { 
+
+	private boolean is_edge(int x, int y) {
 
 		int count = 0;
-		 if (MyLabels[y][x] > 0 )
-			 
-				for (int s = 0; s < 8; s++) {
-					 if( inside(x + xkern[s], y + ykern[s])  &&
-							 MyLabels[(y) + ykern[s]][(x) + xkern[s]] == 0
-							 
-							 || x == 0 || x  == (w-1) 
-							 || y == 0 || y  == (h-1))  {
+		if (inside(x, y) && MyLabels[y][x] > 0)
+
+			for (int s = 0; s < 8; s++) {
+				if (inside(x + xkern[s], y + ykern[s])
+						&& MyLabels[(y) + ykern[s]][(x) + xkern[s]] == 0
+
+						|| x == 0 || x == (w - 1) || y == 0 || y == (h - 1)) {
 
 					count++;
-					break;  
+					break;
 				}
-				}
+			}
+
 		if (count > 0)
 			return true;
 		else
 			return false;
+
 	}
- 
+
 	/**
 	 * Returns true only if the pixel at the coordinates x y is inside the blob
 	 * represented by the parameter <code>blobToMatch</code>.
@@ -1095,13 +1093,14 @@ public class Detector {
 	 * @return Returns true only if the pixel at the coordinates x y is inside
 	 *         the blob represented by the parameter<code>blobToMatch</code>.
 	 */
-	
+
 	public boolean isMatch(int x, int y, int blobToMatch) {
- 
-		if (roiIsSet && inside(x-sroix, y-sroix) && 
-				MyLabels[y-sroiy][x-sroix] == getLabel(blobToMatch)) {
+
+		if (roiIsSet && inside(x - sroix, y - sroix)
+				&& MyLabels[y - sroiy][x - sroix] == getLabel(blobToMatch)) {
 			return true;
-		} else if(!roiIsSet && inside(x, y) && MyLabels[y][x] == getLabel(blobToMatch)){
+		} else if (!roiIsSet && inside(x, y)
+				&& MyLabels[y][x] == getLabel(blobToMatch)) {
 			return true;
 		} else {
 			return false;
@@ -1114,59 +1113,57 @@ public class Detector {
 	 */
 
 	private void initCornersVectors() {
-		 
-		 
-				A = new PVector[getBlobsNumber()];
-				B = new PVector[getBlobsNumber()];
-				C = new PVector[getBlobsNumber()];
-				D = new PVector[getBlobsNumber()];
-    }
+
+		A = new PVector[getBlobsNumber()];
+		B = new PVector[getBlobsNumber()];
+		C = new PVector[getBlobsNumber()];
+		D = new PVector[getBlobsNumber()];
+
+	}
 
 	/**
 	 * Computes some of the blob's main features.
 	 */
-	
+
 	private void computeBlobsFeatures() {
 
-		initCornersVectors(); 
-		
+		initCornersVectors();
+
 		crosspoints = new PVector[getBlobsNumber()][4];
 		// If we have blobs...
-	 	if (blobNumber > 0) { 
-	 	 
-			// For each blob... 
+		if (blobNumber > 0) {
+
+			// For each blob...
 			for (int k = 0; k < blobNumber; k++) {
-				int i = 0; 
+				int i = 0;
 				// Initialise two arrays to hold the blob's edges point
 				// coordinates.
-				 				//assume edge eq coutBlobPixel
-				edgeX = new int[countBlobPixel]; //TODO not safe !
+				// assume edge eq coutBlobPixel
+				edgeX = new int[countBlobPixel]; // TODO not safe !
 				edgeY = new int[countBlobPixel];
-				
-			 
-				// For each pixel
-				for (int y = sy ; y < h ; y++) { 
 
-					for (int x = sx ; x < w  ; x++) {
+				// For each pixel
+				for (int y = sy; y < h; y++) {
+
+					for (int x = sx; x < w; x++) {
 
 						// If a pixel is labelled...
-						if (MyLabels[y][x] > 0) { 
-						 
+						if (MyLabels[y][x] > 0) {
+
 							// If the label is the same as the current blob's
-							// label..			 
-							if (MyLabels[y][x] == labelTab2[k] && is_edge(x, y)) { 
-						 
+							// label..
+							if (MyLabels[y][x] == labelTab2[k] && is_edge(x, y)) {
+
 								// Save its coordinates
-								edgeY[i] =  y;
-								edgeX[i] =  x;
- 
+								edgeY[i] = y;
+								edgeX[i] = x;
+
 								// ..and increment for the next edge point..
 								i++;
 							}
 						}
 					}
 				}
-
 
 				edgeX = PApplet.sort(edgeX);
 				edgeY = PApplet.sort(edgeY);
@@ -1179,28 +1176,26 @@ public class Detector {
 				int minimy = edgeY[0];
 				int maximy = edgeY[edgeY.length - 1];
 
-				Ax = minimx-1;
-				Ay = minimy-1;
-				Bx = maximx+1;
-				By = minimy-1;
-				Cx = minimx-1;
-				Cy = maximy+1;
-				Dx = maximx+1;
-				Dy = maximy+1;
-				 
- 
+				Ax = minimx - 1;
+				Ay = minimy - 1;
+				Bx = maximx + 1;
+				By = minimy - 1;
+				Cx = minimx - 1;
+				Cy = maximy + 1;
+				Dx = maximx + 1;
+				Dy = maximy + 1;
+
 				A[k] = new PVector(Ax, Ay);
 				B[k] = new PVector(Bx, By);
 				C[k] = new PVector(Cx, Cy);
 				D[k] = new PVector(Dx, Dy);
- 
 
 				crosspoints[k][0] = new PVector(((Bx - Ax) / 2) + Ax, Ay);
 				crosspoints[k][1] = new PVector(((Bx - Ax) / 2) + Ax, Cy);
 				crosspoints[k][2] = new PVector(Ax, ((Cy - Ay) / 2) + Ay);
 				crosspoints[k][3] = new PVector(Bx, ((Cy - Ay) / 2) + Ay);
 			}
-		 }
+		}
 	}
 
 	/**
@@ -1222,15 +1217,14 @@ public class Detector {
 	 * @see findCentroids()
 	 * @see getCentroidX(int)
 	 * @see getCentroidY(int)
-     */
-	
+	 */
+
 	public void loadBlobsFeatures() {
 
 		computeBlobsFeatures();
 
 	}
-	
-	 
+
 	/**
 	 * Calculates the blob centroids. <code>findBlobs()</code> or
 	 * <code>imageFindBlobs(PImage)</code>, <code>weightBlobs(boolean)</code>
@@ -1238,11 +1232,10 @@ public class Detector {
 	 * this method. Also this method must be called always before calling
 	 * <code>getCentroidX(int)<,/code> and
 	 * <code>getCentroidY(int)</code>.
-     */
+	 */
 
-   private PVector edgePoints[][];//TODO move up
+	private PVector edgePoints[][];// TODO move up
 
- 
 	private void loadEdgePoints() {
 
 		edgePoints = new PVector[blobNumber][];
@@ -1250,8 +1243,7 @@ public class Detector {
 			for (int i = 0; i < blobNumber; i++)
 				edgePoints[i] = getEdgePoints(i);
 	}
-	
- 
+
 	/**
 	 * Computes the blob centroid. This method is much more simple and fast than
 	 * it was in the previous release because, to compute the centroid, it takes
@@ -1286,11 +1278,11 @@ public class Detector {
 			}
 		}
 	}
-	
+
 	/**
-	 * Returns the blob centroid x coordinate. Depends on <code>findBlobs()</code> or
-	 * <code>imageFindBlobs()</code>,<code>findCentroids()</code>,
-	 * <code>loadBlobsFeatures()</code> and
+	 * Returns the blob centroid x coordinate. Depends on
+	 * <code>findBlobs()</code> or <code>imageFindBlobs()</code>,
+	 * <code>findCentroids()</code>, <code>loadBlobsFeatures()</code> and
 	 * <code>findCentroids()</code>methods.
 	 * 
 	 * @param blobnumber
@@ -1300,15 +1292,15 @@ public class Detector {
 	 */
 
 	public float getCentroidX(int blobnumber) {
-	 
-			return CenterOfMX[blobnumber];
- 
-    }
+
+		return CenterOfMX[blobnumber];
+
+	}
 
 	/**
-	 * Returns the blob centroid y coordinate. Depends on <code>findBlobs()</code> or
-	 * <code>imageFindBlobs()</code>,<code>findCentroids()</code>,
-	 * <code>loadBlobsFeatures()</code> and
+	 * Returns the blob centroid y coordinate. Depends on
+	 * <code>findBlobs()</code> or <code>imageFindBlobs()</code>,
+	 * <code>findCentroids()</code>, <code>loadBlobsFeatures()</code> and
 	 * <code>findCentroids()</code>methods.
 	 * 
 	 * @param blobnumber
@@ -1318,35 +1310,33 @@ public class Detector {
 	 */
 
 	public float getCentroidY(int blobnumber) {
-	 
-			return CenterOfMY[blobnumber];
- 
+
+		return CenterOfMY[blobnumber];
+
 	}
 
 	/**
-	 * Returns the blob width.
-	 * Depends on
-	 * <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code>,
-	 * <code>loadBlobsFeatures()</code> methods.
+	 * Returns the blob width. Depends on <code>findBlobs()</code> or
+	 * <code>imageFindBlobs(PImage)</code>, <code>loadBlobsFeatures()</code>
+	 * methods.
 	 * 
 	 * @param blobnumber
 	 * @return the width of the blob referred by the parameter.
 	 * @see #loadBlobsFeatures()
 	 */
-	
+
 	public int getBlobWidth(int blobnumber) {
 		if (blobNumber > 0)
-			return  (int)  (B[blobnumber].x - A[blobnumber].x)    ;
+			return (int) (B[blobnumber].x - A[blobnumber].x);
 		else
 			return 0;
 
 	}
 
 	/**
-	 * Returns the blob height.
-	 * Depends on
-	 * <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code>,
-	 * <code>loadBlobsFeatures()</code> methods. 
+	 * Returns the blob height. Depends on <code>findBlobs()</code> or
+	 * <code>imageFindBlobs(PImage)</code>, <code>loadBlobsFeatures()</code>
+	 * methods.
 	 * 
 	 * @param blobnumber
 	 * @return the height of the blob referred by the parameter.
@@ -1357,7 +1347,7 @@ public class Detector {
 
 	public int getBlobHeight(int blobnumber) {
 		if (blobNumber > 0)
-			return (int)   (C[blobnumber].y - A[blobnumber].y) ; 
+			return (int) (C[blobnumber].y - A[blobnumber].y);
 		else
 			return 0;
 	}
@@ -1374,8 +1364,9 @@ public class Detector {
 	}
 
 	/**
-	 * Get the total weight of all the blobs in the current frame or image. Depends
-	 * on <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code> methods.
+	 * Get the total weight of all the blobs in the current frame or image.
+	 * Depends on <code>findBlobs()</code> or
+	 * <code>imageFindBlobs(PImage)</code> methods.
 	 * 
 	 * @return countBlobPixel The total weight for all the blobs in the current
 	 *         frame or image.
@@ -1386,23 +1377,22 @@ public class Detector {
 	}
 
 	/**
-	 * Returns the weight of the blob specified. Depends on <code>findBlobs()</code> or
-	 * <code>imageFindBlobs(PImage)</code>, <code>weightBlobs(boolean)</code>, methods.
+	 * Returns the weight of the blob specified. Depends on
+	 * <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code>,
+	 * <code>weightBlobs(boolean)</code>, methods.
 	 * 
 	 * @param blobNum
 	 *            The number of the blob for which the weight is returned. The
 	 *            first blob is numbered with 0.
 	 * @return The weight of the blob specified by the parameter blobNum.
 	 */
-	
+
 	public int getBlobWeight(int blobNum) {
-		if(blobWeighted)
-		return blobWeightList[blobNum];
-		else
-		{
-			PApplet.println("Error!:\nPlease call weightBlobs before\n"+
-							"calling getBlobWeight.\n" +
-							version());
+		if (blobWeighted)
+			return blobWeightList[blobNum];
+		else {
+			PApplet.println("Error!:\nPlease call weightBlobs before\n"
+					+ "calling getBlobWeight.\n" + version());
 			return -1;
 		}
 	}
@@ -1411,11 +1401,10 @@ public class Detector {
 	 * Returns the weight of the blob with the specified label. The first label
 	 * is numbered with 1. The labels are not consecutive. You can use
 	 * <code>get_label(int blobnumber) </code> or
-	 * <code> get_label(int x, int y)</code> to find the label to
-	 * pass to this method. <code>findBlobs()</code> or
-	 * <code>imageFindBlobs(PImage)</code>, <code>weightBlobs(boolean)</code>,
-	 * and <code>loadBlobsFeatures()</code> must be called before to
-	 * call this method.
+	 * <code> get_label(int x, int y)</code> to find the label to pass to this
+	 * method. <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code>,
+	 * <code>weightBlobs(boolean)</code>, and <code>loadBlobsFeatures()</code>
+	 * must be called before to call this method.
 	 * 
 	 * @param label
 	 *            The label of the blob for which the weight is returned. The
@@ -1426,9 +1415,9 @@ public class Detector {
 	 * @see getLabel(int)
 	 * @see getLabel(int,int)
 	 */
-	
-	public int getBlobWeightLabel(int label) { 
-		
+
+	public int getBlobWeightLabel(int label) {
+
 		int cnt = 0;
 		while (labelTab2[cnt] != label) {
 			cnt++;
@@ -1447,16 +1436,15 @@ public class Detector {
 	 * @return A An array of PVectors. Each vector represents the left upper
 	 *         corner of a blob's bounding box.
 	 */
-	
+
 	public PVector[] getA() {
 		PVector a[] = new PVector[blobNumber];
-		if(roiIsSet){
-			for(int i=0; i<A.length; i++){
-				a[i]= new PVector (A[i].x+sroix,A[i].y+sroiy);
-		    }
+		if (roiIsSet) {
+			for (int i = 0; i < A.length; i++) {
+				a[i] = new PVector(A[i].x + sroix, A[i].y + sroiy);
+			}
 			return a;
-		}
-		else{
+		} else {
 			return A;
 		}
 	}
@@ -1470,16 +1458,15 @@ public class Detector {
 	 * @return B An array of PVectors. Each vector represents the right upper
 	 *         corner of a blob's bounding box .
 	 */
-	
+
 	public PVector[] getB() {
 		PVector b[] = new PVector[blobNumber];
-		if(roiIsSet){
-			for(int i=0; i<B.length; i++){
-				b[i]= new PVector(B[i].x+sroix,B[i].y+sroiy);
-		    }
+		if (roiIsSet) {
+			for (int i = 0; i < B.length; i++) {
+				b[i] = new PVector(B[i].x + sroix, B[i].y + sroiy);
+			}
 			return b;
-		}
-		else{
+		} else {
 			return B;
 		}
 	}
@@ -1493,16 +1480,15 @@ public class Detector {
 	 * @return C An array of PVectors. Each vector represents the left lower
 	 *         corner of a blob's bounding box .
 	 */
-	
+
 	public PVector[] getC() {
 		PVector c[] = new PVector[blobNumber];
-		if(roiIsSet){
-			for(int i=0; i<C.length; i++){
-				c[i]= new PVector(C[i].x+sroix,C[i].y+sroiy);
-		    }
+		if (roiIsSet) {
+			for (int i = 0; i < C.length; i++) {
+				c[i] = new PVector(C[i].x + sroix, C[i].y + sroiy);
+			}
 			return c;
-		}
-		else{
+		} else {
 			return C;
 		}
 	}
@@ -1516,16 +1502,15 @@ public class Detector {
 	 * @return D An array of PVectors. Each vector represents the right lower
 	 *         corner of a blob's bounding box .
 	 */
-	
+
 	public PVector[] getD() {
 		PVector d[] = new PVector[blobNumber];
-		if(roiIsSet){
-			for(int i=0; i<D.length; i++){
-				d[i]= new PVector(D[i].x+sroix,D[i].y+sroiy);
-		    }
+		if (roiIsSet) {
+			for (int i = 0; i < D.length; i++) {
+				d[i] = new PVector(D[i].x + sroix, D[i].y + sroiy);
+			}
 			return d;
-		}
-		else{
+		} else {
 			return D;
 		}
 	}
@@ -1533,8 +1518,7 @@ public class Detector {
 	/**
 	 * Returns the blob number at the x y coordinates. If at these coordinate
 	 * there isn't a blob returns -1; <code>findBlobs()</code> or
-	 * <code>imageFindBlobs()</code> must be called first to call this
-	 * method.
+	 * <code>imageFindBlobs()</code> must be called first to call this method.
 	 * 
 	 * @param x
 	 *            The X coordinate to check for blob presence.
@@ -1544,26 +1528,25 @@ public class Detector {
 	 *         coordinate there isn't a blob returns -1;
 	 */
 
-	public int getBlobNumberAt(int x, int y) { //  ?-?
-	 
-			 if(roiIsSet){
-			  
-				 for (int i = 0; i < blobNumber; i++) {
-					 if (get_label(x -sroix , y-sroiy ) == getLabel(i)) 
-						 return i;
-				 }
-			}else if(!roiIsSet){
-				for (int i = 0; i < blobNumber; i++) {
-					if (get_label( x, y) == getLabel(i))
-						 return i;
-				}
-				
+	public int getBlobNumberAt(int x, int y) { // ?-?
+
+		if (roiIsSet) {
+
+			for (int i = 0; i < blobNumber; i++) {
+				if (get_label(x - sroix, y - sroiy) == getLabel(i))
+					return i;
 			}
-			 PApplet.println("Error!\nNo blob here.\n");
-	  return -1;	  
-		 
+		} else if (!roiIsSet) {
+			for (int i = 0; i < blobNumber; i++) {
+				if (get_label(x, y) == getLabel(i))
+					return i;
+			}
+
+		}
+		PApplet.println("Error!\nNo blob here.\n");
+		return -1;
+
 	}
-	 
 
 	/**
 	 * 
@@ -1579,15 +1562,15 @@ public class Detector {
 	 * @return The value of the label at x y;
 	 * 
 	 */
-	
+
 	private int get_label(int x, int y) {
- 
-		if(inside(x,y))
-		return MyLabels[y][x];
-		else 
-		return 0;
-		}
-	
+
+		if (inside(x, y))
+			return MyLabels[y][x];
+		else
+			return 0;
+	}
+
 	/**
 	 * 
 	 * Returns the blob label at <code> x, y </code> screen coordinates. If at
@@ -1602,35 +1585,33 @@ public class Detector {
 	 * @return The value of the label at x y;
 	 * 
 	 */
-	
+
 	public int getLabel(int x, int y) {
-		if(roiIsSet){
-    	x = x - sroix;
-		y = y - sroiy;
+		if (roiIsSet) {
+			x = x - sroix;
+			y = y - sroiy;
 		}
-		 
-		if(inside(x,y))
-		return MyLabels[y][x];
-		else 
-		return 0;
-		}
-	
-    /**
-	 * Returns the label of the blob indicated by the  method's
-	 * parameter. <code>blobnumber</code> can be from 0 to
-	 * <code>getBlobsNumber()</code>
+
+		if (inside(x, y))
+			return MyLabels[y][x];
+		else
+			return 0;
+	}
+
+	/**
+	 * Returns the label of the blob indicated by the method's parameter.
+	 * <code>blobnumber</code> can be from 0 to <code>getBlobsNumber()</code>
 	 * 
-	 * If in an image there are 5 blobs, passing <code>blobnumber</code> = 4 
-	 * will return the label of the 5th blob in the image, counting from the 
-	 * top left corner of the screen.
-	 * This method depends on <code>findBlobs()</code> or <code>imageFindBlobs()</code>.
+	 * If in an image there are 5 blobs, passing <code>blobnumber</code> = 4
+	 * will return the label of the 5th blob in the image, counting from the top
+	 * left corner of the screen. This method depends on
+	 * <code>findBlobs()</code> or <code>imageFindBlobs()</code>.
 	 * 
-	 * @param <code>blobnumber</code>
-	 *            The blob for which the label is returned.
-	 * @return The value of the label for the blob refered by 
-	 * 			the parameter <code>blobnumber</code>.
-     */
-	
+	 * @param <code>blobnumber</code> The blob for which the label is returned.
+	 * @return The value of the label for the blob indicated by the parameter
+	 *         <code>blobnumber</code>.
+	 */
+
 	public int getLabel(int blobnumber) {
 		if (blobNumber > 0) {
 			return labelTab2[blobnumber];
@@ -1652,23 +1633,23 @@ public class Detector {
 	 * 
 	 */
 
-	public PVector[] getEdgePoints(int blobnumber) {  
+	public PVector[] getEdgePoints(int blobnumber) {
 
 		PVector[] edgeCoordinates = new PVector[getEdgeSize(blobnumber)];
 		int count = 0;
-		for (int y = (int)A[blobnumber].y; y <(int) A[blobnumber].y 
-				+  getBlobHeight(blobnumber)  ; y++) {
-			for (int x = (int)A[blobnumber].x; x <(int) A[blobnumber].x
-					+  getBlobWidth(blobnumber)  ; x++) {
+		for (int y = (int) A[blobnumber].y; y < (int) A[blobnumber].y
+				+ getBlobHeight(blobnumber); y++) {
+			for (int x = (int) A[blobnumber].x; x < (int) A[blobnumber].x
+					+ getBlobWidth(blobnumber); x++) {
 				if (is_edge(x, y) && get_label(x, y) == getLabel(blobnumber)) {
-					 
-					if(roiIsSet==false){
-						edgeCoordinates[count] = new PVector(x , y  ); 
+
+					if (roiIsSet == false) {
+						edgeCoordinates[count] = new PVector(x, y);
+					} else if (roiIsSet) {
+						edgeCoordinates[count] = new PVector(x + sroix, y
+								+ sroiy);
 					}
-					else if(roiIsSet){
-						edgeCoordinates[count] = new PVector(x+sroix, y+sroiy  );
-					}
-					count++; 
+					count++;
 
 				}
 			}
@@ -1689,15 +1670,15 @@ public class Detector {
 	 * 
 	 */
 
-	public int getEdgeSize(int blobnumber) { 
+	public int getEdgeSize(int blobnumber) {
 
 		int countEdgePoints = 0;
 
-		for (int y = (int) A[blobnumber].y; y <(int) A[blobnumber].y
-				+  getBlobHeight(blobnumber) ; y++) {
-			for (int x = (int) A[blobnumber].x; x < (int)A[blobnumber].x
-					+  getBlobWidth(blobnumber) ; x++) {
-				if (is_edge(x , y ) && get_label(x  , y  ) == getLabel(blobnumber)) {
+		for (int y = (int) A[blobnumber].y; y < (int) A[blobnumber].y
+				+ getBlobHeight(blobnumber); y++) {
+			for (int x = (int) A[blobnumber].x; x < (int) A[blobnumber].x
+					+ getBlobWidth(blobnumber); x++) {
+				if (is_edge(x, y) && get_label(x, y) == getLabel(blobnumber)) {
 					countEdgePoints++;
 
 				}
@@ -1720,30 +1701,29 @@ public class Detector {
 	 */
 
 	public PVector[] getBlobPixelsLocation(int blobnumber) {
-	 
 
-			PVector[] pixelsCoordinates = new PVector[getBlobWeight(blobnumber)];
+		PVector[] pixelsCoordinates = new PVector[getBlobWeight(blobnumber)];
 
-			int count = 0;
+		int count = 0;
 
-			for (int y = (int) A[blobnumber].y; y < (int) A[blobnumber].y
-					+ getBlobHeight(blobnumber); y++) {
+		for (int y = (int) A[blobnumber].y; y < (int) A[blobnumber].y
+				+ getBlobHeight(blobnumber); y++) {
 
-				for (int x = (int) A[blobnumber].x; x < (int) A[blobnumber].x
-						+ getBlobWidth(blobnumber); x++) {
+			for (int x = (int) A[blobnumber].x; x < (int) A[blobnumber].x
+					+ getBlobWidth(blobnumber); x++) {
 
-					if (get_label(x, y) == getLabel(blobnumber)) { 
-						if (roiIsSet)
-							pixelsCoordinates[count] = new PVector(x + sroix, y
-									+ sroiy);
-						else
-							pixelsCoordinates[count] = new PVector(x, y);
-						count++;
+				if (get_label(x, y) == getLabel(blobnumber)) {
+					if (roiIsSet)
+						pixelsCoordinates[count] = new PVector(x + sroix, y
+								+ sroiy);
+					else
+						pixelsCoordinates[count] = new PVector(x, y);
+					count++;
 
-					}
 				}
 			}
-			return pixelsCoordinates;
+		}
+		return pixelsCoordinates;
 	}
 
 	/**
@@ -1761,9 +1741,9 @@ public class Detector {
 	public float getBoxCentX(int blobnumber) {
 		float w_ = B[blobnumber].x - A[blobnumber].x;
 		float x_ = w_ / 2 + A[blobnumber].x;
-		if(roiIsSet)
-		return sroix+x_;
-		else 
+		if (roiIsSet)
+			return sroix + x_;
+		else
 			return x_;
 	}
 
@@ -1784,16 +1764,15 @@ public class Detector {
 	public float getBoxCentY(int blobnumber) {
 		float h_ = C[blobnumber].y - A[blobnumber].y;
 		float y_ = h_ / 2 + A[blobnumber].y;
-		if(roiIsSet)
-		return sroiy+y_;
-		else 
+		if (roiIsSet)
+			return sroiy + y_;
+		else
 			return y_;
 	}
-	
-	 
+
 	/**
-	 * I removed this because it's a waste of CPU cycles. The "cross points"
-	 * can be very easily computed by the users using getA(), getB() etc...
+	 * I removed this because it's a waste of CPU cycles. The "cross points" can
+	 * be very easily computed by the users using getA(), getB() etc...
 	 * 
 	 * Finds the coordinates of the middle point of the blob's bounding box
 	 * side. <code>findBlobs()</code> or <code>imageFindBlobs(PImage)</code>,
@@ -1829,15 +1808,15 @@ public class Detector {
 
 		return crosspoints[blobnumber][pointVector];
 	}
-	
-	/** 
+
+	/**
 	 * Hello message.
-	*/
+	 */
 	public String sayHello() {
-		return "Welcome and happy hacking with Blobscanner.\n"+
-				"If you have any question or you wish to put a link\n"+
-				"to a project on the blobscanner's web site,\n  "+
-				"send me an email to blobdetector.info@gmail.com. \n";
+		return "Welcome and happy hacking with Blobscanner.\n"
+				+ "If you have any question or you wish to put a link\n"
+				+ "to a project on the blobscanner web site,\n "
+				+ "send me an email to blobdetector.info@gmail.com. \n";
 	}
 
 	/**
@@ -1849,5 +1828,4 @@ public class Detector {
 		return VERSION;
 	}
 
-}//18/01/14 15:26:48 
-
+}// 20/07/14 03:35:54
